@@ -8,9 +8,9 @@ app = FastAPI()
 
 service = JokeService()
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
 async def index():
-    return """<a href="/docs">API docs</a>"""
+    return "<a href=\"/docs\">API docs</a>"
 
 @app.get("/api/jokes/")
 async def get_joke() -> list[JokeRead]:
