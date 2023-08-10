@@ -1,14 +1,15 @@
 import asyncio
-from sqlmodel import SQLModel
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import select, delete, insert
+
 from schema import Joke, JokeCreate, JokeRead
 
 engine = create_async_engine("sqlite+aiosqlite:///../sqlite.db")
 
 async def create_tables():
+    from sqlmodel import SQLModel
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
 # create tables from schema    

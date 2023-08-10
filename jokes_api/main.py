@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-import uvicorn
-from service import JokeService
-from schema import Joke, JokeCreate, JokeRead
+
+from service import JokeService, \
+    Joke, JokeCreate, JokeRead # schema
 
 app = FastAPI()
 
@@ -32,4 +32,5 @@ async def delete_joke(id: int):
     await service.delete_joke(id)
 
 if __name__ == "__main__":
+    import uvicorn
     uvicorn.run("main:app")
