@@ -11,6 +11,7 @@ python = "^3.10"
 pytest = "^7.4.0"
 fastapi = "^0.101.0"
 uvicorn = "^0.23.2"
+sqlmodel = "^0.0.8"
 
 
 [build-system]
