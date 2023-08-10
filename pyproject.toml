@@ -8,11 +8,13 @@ packages = [{include = "jokes_api"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pytest = "^7.4.0"
 fastapi = "^0.101.0"
 uvicorn = "^0.23.2"
 sqlmodel = "^0.0.8"
+aiosqlite = "^0.19.0"
 
+[tool.poetry.group.test.dependencies]
+pytest = "^7.4.0"
 
 [build-system]
 requires = ["poetry-core"]
