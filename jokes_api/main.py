@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 
 from service import JokeService, \
     Joke, JokeCreate, JokeRead # schema
@@ -7,10 +7,6 @@ from service import JokeService, \
 app = FastAPI()
 
 service = JokeService()
-
-@app.get("/", response_class=HTMLResponse, include_in_schema=False)
-async def index():
-    return "<a href=\"/docs\">API docs</a>"
 
 @app.get("/api/jokes/")
 async def get_joke() -> list[JokeRead]:
@@ -34,3 +30,9 @@ async def delete_joke(id: int):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app")
+    # run react thru vite
+    from pathlib import Path
+    app.mount("/", StaticFiles(
+        directory= Path(__file__).parents[1] / "frontend" / "dist", 
+        html=True
+    ))
