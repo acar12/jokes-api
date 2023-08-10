@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "jokes-api"
+version = "0.1.0"
+description = ""
+authors = ["acar12 <39702495+acar12@users.noreply.github.com>"]
+readme = "README.md"
+packages = [{include = "jokes_api"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pytest = "^7.4.0"
+fastapi = "^0.101.0"
+uvicorn = "^0.23.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
