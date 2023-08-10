@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import select, delete, insert
-from jokes_api.schema import Joke, JokeCreate, JokeRead
+from schema import Joke, JokeCreate, JokeRead
 
 engine = create_async_engine("sqlite+aiosqlite:///../sqlite.db")
 
@@ -35,6 +35,15 @@ class JokeService:
             joke = result.scalars().one()
             joke_read = JokeRead(**dict(joke))
         return joke_read
+
+    async def list_jokes(self) -> list[JokeRead]:
+        joke_reads = []
+        async with self.async_session() as session:
+            stmt = select(Joke)
+            result = await session.execute(stmt)
+            jokes = result.scalars()
+            joke_reads = list(map(lambda x : JokeRead(**dict(x)), jokes))
+        return joke_reads
 
     async def delete_joke(self, id: int):
         async with self.async_session() as session:

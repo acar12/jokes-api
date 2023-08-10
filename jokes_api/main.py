@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 import uvicorn
-from jokes_api.service import JokeService
-from jokes_api.schema import Joke, JokeCreate, JokeRead
+from service import JokeService
+from schema import Joke, JokeCreate, JokeRead
 
 app = FastAPI()
 
@@ -11,6 +11,11 @@ service = JokeService()
 @app.get("/", response_class=HTMLResponse)
 async def index():
     return """<a href="/docs">API docs</a>"""
+
+@app.get("/api/jokes/")
+async def get_joke() -> list[JokeRead]:
+    joke_reads = await service.list_jokes()
+    return joke_reads
 
 @app.get("/api/jokes/{id}")
 async def get_joke(id: int) -> JokeRead:
