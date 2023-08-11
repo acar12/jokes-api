@@ -3,7 +3,7 @@ import { useForm, FieldValues } from "react-hook-form"
 import Form from "react-bootstrap/Form"
 import Card from "react-bootstrap/Card"
 import Button from "react-bootstrap/Button"
-import apiURL from "./util"
+import axios from "axios"
 
 interface Joke {
     id: number,
@@ -12,15 +12,16 @@ interface Joke {
     created_at: string
 }
 
+const apiURL = new URL("api", window.location.origin)
+apiURL.port = "8000"
+const api = axios.create({baseURL: apiURL.toString()})
+
 const JokeForm = ({ refreshJokes }: { refreshJokes: () => Promise<void> }) => {
-    const { register, handleSubmit } = useForm()
-    const insertJoke = (data: FieldValues) => fetch(apiURL("api/jokes/"), {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ name: data.name, joke: data.joke})
-    }).then(refreshJokes)
+    const { register, handleSubmit, reset } = useForm()
+    const insertJoke = (data: FieldValues) => {
+        reset()
+        api.post("jokes", {name: data.name, joke: data.joke}).then(refreshJokes)
+    }
 
     return (
         <Form onSubmit={handleSubmit(insertJoke)} className="mb-3">
@@ -44,7 +45,7 @@ const JokeCard = ({ joke, refreshJokes }: { joke: Joke, refreshJokes: () => Prom
         weekday: "long", year: "numeric", month: "long", day: "numeric",
         hour: "numeric", minute: "numeric", hour12: true
     }
-    const deleteJoke = (id: number) => fetch(apiURL(`api/jokes/${id}`), { method: "DELETE" }).then(refreshJokes)
+    const deleteJoke = (id: number) => api.delete(`jokes/${id}`).then(refreshJokes)
 
     return (
         <Card key={joke.id} className="mt-2 mb-3">
@@ -60,7 +61,7 @@ const JokeCard = ({ joke, refreshJokes }: { joke: Joke, refreshJokes: () => Prom
 
 function App() {
     const [jokes, setJokes] = useState<Joke[]>([])
-    const refreshJokes = () => fetch(apiURL("/api/jokes/")).then(res => res.json()).then(setJokes)
+    const refreshJokes = () => api.get("jokes").then(res => setJokes(res.data))
 
 
     useEffect(() => {refreshJokes()}, [])
