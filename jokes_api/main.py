@@ -1,11 +1,11 @@
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from service import JokeService, \
     Joke, JokeCreate, JokeRead # schema
 
 app = FastAPI()
-
 service = JokeService()
 
 @app.get("/api/jokes/")
@@ -27,12 +27,13 @@ async def post_joke(joke_create: JokeCreate) -> Joke:
 async def delete_joke(id: int):
     await service.delete_joke(id)
 
+#### run vite
+import os
+dist = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend", "dist")
+app.mount("/", StaticFiles(directory=dist, html=True))
+####
+
 if __name__ == "__main__":
+    # run uvicorn
     import uvicorn
     uvicorn.run("main:app")
-    # run react thru vite
-    from pathlib import Path
-    app.mount("/", StaticFiles(
-        directory= Path(__file__).parents[1] / "frontend" / "dist", 
-        html=True
-    ))
