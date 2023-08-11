@@ -10,7 +10,7 @@ class JokeBase(SQLModel):
 class Joke(JokeBase, table=True):
     # field definitions for ease of use
     id: int | None = Field(default=None, primary_key=True)
-    created_at: datetime | None = Field(default=datetime.utcnow(), nullable=False)
+    created_at: datetime | None = Field(default_factory=datetime.now, nullable=False)
 
 class JokeCreate(JokeBase):
     pass

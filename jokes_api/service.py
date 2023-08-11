@@ -50,3 +50,4 @@ class JokeService:
         async with self.async_session() as session:
             stmt = delete(Joke).where(Joke.id == id)
             result = await session.execute(stmt)
+            await session.commit()
